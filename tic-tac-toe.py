@@ -78,7 +78,6 @@ def is_player_input_valid(player_input,board):
 def start_game():
     board = [False] * 9
     total_moves = 0
-    # Can add option for entering player name [Need to refactor code to reflect this change]
     current_player = select_player_turn_randomly()
     while not total_moves == 9:
         print_current_player(current_player)
@@ -93,12 +92,20 @@ def start_game():
             total_moves +=1
             print_board(board)
             if check_if_player_has_won(current_player,total_moves,board):
-                # Can add option to restart game
-                print(f'Player {current_player} has won the game')
-                break
+                print(f'Player {current_player} has won the game.')
+                if play_again():
+                    total_moves = 0
+                    board = [False] * 9
+                else:
+                    exit_game()
+                    break
             current_player = 2 if current_player == 1 else 1
 
 def exit_game():
-    print("You have exited the game.")
+    print("Bye.")
+
+def play_again():
+    response = input("Do you want to play again? [Enter Y/y for playing again]:")
+    return response.lower() == "y"
 
 start_game()
