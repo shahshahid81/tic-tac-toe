@@ -1,8 +1,31 @@
 from math import ceil
 from random import random
 
-def print_board():
-    pass
+def get_single_block():
+    return "   |"
+
+def print_board(board):
+    header = " " + "_" * 11
+    top_row = "|" + get_single_block() * 3
+    bottom_row = "|" + "___|" * 3
+    marker_rows = [2,5,8]
+    print(header)
+    for i in range(1,10):
+        if i % 3 == 0:
+            print(bottom_row)
+        elif i in marker_rows:
+            middle_row = "|"
+            board_position_lower_bound = i-2 
+            board_position_upper_bound = i+1 
+            for board_position in range(board_position_lower_bound, board_position_upper_bound):
+                single_block = get_single_block()
+                if board[board_position] != False:
+                    marker = "X" if board[board_position] == 1 else "0"
+                    single_block = single_block[0] +  marker + single_block[2:]
+                middle_row += single_block
+            print(middle_row) 
+        else:
+            print(top_row)
 
 def check_if_player_has_won(current_player,total_moves,board):
     if total_moves < 5:
@@ -63,17 +86,19 @@ def start_game():
         if not is_player_input_valid(player_input,board):
             continue
         if player_input == "exit":
+            exit_game()
             break
         else:
             board[int(player_input) - 1] = current_player
             total_moves +=1
+            print_board(board)
             if check_if_player_has_won(current_player,total_moves,board):
                 # Can add option to restart game
                 print(f'Player {current_player} has won the game')
                 break
             current_player = 2 if current_player == 1 else 1
 
-def end_game():
-    print("Game has ended.")
+def exit_game():
+    print("You have exited the game.")
 
 start_game()
